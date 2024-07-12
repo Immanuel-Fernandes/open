@@ -1,4 +1,6 @@
 streamlit
+sqlite3==3.35.0
 embedchain
 google-generativeai
-sqlite3= 3.35.0.\033[0m\n
+
+
