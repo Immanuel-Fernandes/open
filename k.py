@@ -1,13 +1,14 @@
 import streamlit as st
 from embedchain import App
+import asyncio
 
 # Function to initialize Embedchain app
-async def initialize_app(api_key):
-    return await App(api_key=api_key)
+async def initialize_app():
+    return App()
 
 # Function to query Embedchain
-async def query_answer(app, question):
-    return await app.query(question)
+async def query_answer(app, api_key, question):
+    return await app.query(question, api_key=api_key)
 
 def main():
     st.title('Embedchain Query App')
@@ -21,12 +22,13 @@ def main():
     # Initialize Embedchain app when both API key and question are provided
     if st.button('Query') and api_key and question:
         st.write('Fetching answer...')
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        app = loop.run_until_complete(initialize_app(api_key))
-        result = loop.run_until_complete(query_answer(app, question))
-        st.write(f'**Question:** {question}')
-        st.write(f'**Answer:** {result}')
+        try:
+            app = asyncio.run(initialize_app())
+            result = asyncio.run(query_answer(app, api_key, question))
+            st.write(f'**Question:** {question}')
+            st.write(f'**Answer:** {result}')
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
 
 if __name__ == '__main__':
     main()
