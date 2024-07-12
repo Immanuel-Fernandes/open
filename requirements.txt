@@ -1,6 +1,3 @@
 streamlit
 embedchain
 google-generativeai
-SQLite3
-
-
